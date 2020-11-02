@@ -12,7 +12,7 @@ if (isset($_POST['delete'])) {
 
 // delete all
 if (isset($_POST['deleteall'])) {
-    $id = $_POST['deleteall'];
+    // $id = $_POST['deleteall'];
     $query = "DELETE FROM `informations`";
     $run = mysqli_query($db, $query);
     if ($run) {

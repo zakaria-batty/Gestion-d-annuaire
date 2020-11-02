@@ -1,6 +1,12 @@
 <?php
+session_start();
+if(isset($_SESSION['a'])&&isset($_SESSION['password'])):
+
+
+
 include('include/header.php');
 include('../database/db.php');
+// var_dump($_SESSION);
 ?>
 
 <div class="container-fluid">
@@ -16,7 +22,7 @@ include('../database/db.php');
                         <a href="home.php" class="btn btn-sm btn-dark mr-2 mb-2">
                             <i class="fas fa-home"> Home</i>
                         </a>
-                        <a href="index.php" title="Déconnexion" class="btn btn-dark mr-2 mb-2" style="font-size: 12px;">
+                        <a href="logout.php" title="Déconnexion" class="btn btn-dark mr-2 mb-2" style="font-size: 12px;">
                             <i class="fas fa-user mr-2 text-white"> Déconnexion</i>
                         </a>
                         <?php
@@ -114,4 +120,8 @@ include('../database/db.php');
 </div>
 <?php
 include('include/header.php');
+                                else:
+                                    header('Location:index.php');
+                                endif;
+
 ?>

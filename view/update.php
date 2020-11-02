@@ -5,10 +5,13 @@ include('../database/db.php');
 $id = isset($_GET['id']) ? $_GET['id'] : '';
 
 
+
+
+
+
 $query = "SELECT * FROM informations WHERE id='$id'";
 $run = mysqli_query($db, $query);
 $recup = mysqli_fetch_array($run);
-
 if (isset($_POST['submit'])) :
 
     $id = $_POST['id'];

@@ -1,58 +1,87 @@
 <?php
 include('view/include/header.php');
 include('database/db.php');
-
-if (isset($_POST['submit'])) :
-
-    $email = htmlentities($_POST['email']);
-    $password = htmlentities($_POST['password']);
-
-    $query = "SELECT * FROM login WHERE email = '$email' AND password = '$password'";
-    $run = mysqli_query($db, $query);
-
-    $result = mysqli_fetch_array($run);
-    if ($result) {
-        $_SESSION['username'] = $result['nom'];
-        header("location:view/home.php");
-    } else {
-        header("location:index.php?message=err");
-    }
-endif;
 ?>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 mx-auto mt-4">
+<div class="container-fluid">
+    <div class="row my-4">
+        <div class="col-md-12 mx-auto">
             <div class="card">
-                <div class="card-header">
-                    <?php
-                    if (isset($_GET['message']) && $_GET['message'] == 'err') :
-                        echo "<div class='alert alert-danger'>Veuillez réessayer</div>";
-                    endif;
-                    ?>
+                <div class="card-body bg-light">
+
+                        <?php
+                        // searsh
+                        if (isset($_POST['find'])) :
+                            $search = $_POST['search'];
+                            $query = "SELECT * FROM `informations` WHERE CONCAT(`nom`, `societe`,`adresse`, `cp`, `ville`, `pays`) LIKE '%" . $search . "%'";
+                            $run = mysqli_query($db, $query);
+                        else :
+                            $query = "SELECT * FROM `informations`";
+                            $run = mysqli_query($db, $query);;
+                        endif;
+                        ?>
+                        <form method="post" class="float-right mb-2 d-flex flex-row" action="">
+                            <input type="text" name="search" placeholder="Recherche" class="form-control">
+                            <button class="btn btn-info btn-sm" name="find" type="submit"><i class="fas fa-search"></fas-search></i></button>
+                        </form>
+
+                    <div class="table-responsive">
+                        <?php
+                        if (isset($_GET['message']) && $_GET['message'] == 'ajouter') :
+                            echo "<div class='alert alert-success'>les informations ajouter a été avec succès</div>";
+                        elseif (isset($_GET['message']) && $_GET['message'] == 'update') :
+                            echo "<div class='alert alert-success'>les informations modifié a été avec succès</div>";
+                        elseif (isset($_GET['message']) && $_GET['message'] == 'delete') :
+                            echo "<div class='alert alert-danger'>les informations supprimé a été avec succès</div>";
+                        elseif (isset($_GET['message']) && $_GET['message'] == 'commentaire') :
+                            echo "<div class='alert alert-success'>le commentaire ajouter a été avec succès</div>";
+                        endif;
+                        ?>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nom</th>
+                                    <th scope="col">société</th>
+                                    <th scope="col" style="padding-right: 9rem;">service</th>
+                                    <th scope="col" style="padding-right: 10rem;">adresse</th>
+                                    <th scope="col">cp</th>
+                                    <th scope="col">téléphone</th>
+                                    <th scope="col">Ville</th>
+                                    <th scope="col" style="padding-right: 9rem;">Pays</th>
+                                    <th scope="col" style="padding-right: 9rem;">Fixe</th>
+                                    <th scope="col">Fax</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Commentaire</th>
+                                    <th scope="col" style="padding-right: 18rem;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                while ($search = mysqli_fetch_array($run)) {
+                                ?>
+                                    <tr>
+                                        <th scope="row"><?= $search['nom'] ?></th>
+                                        <td><?= $search['societe'] ?></td>
+                                        <td><?= $search['service'] ?></td>
+                                        <td><?= $search['adresse'] ?></td>
+                                        <td><?= $search['cp'] ?></td>
+                                        <td><?= $search['telephone'] ?></td>
+                                        <td><?= $search['ville'] ?></td>
+                                        <td><?= $search['pays'] ?></td>
+                                        <td><?= $search['fixe'] ?></td>
+                                        <td><?= $search['fax'] ?></td>
+                                        <td><?= $search['email'] ?></td>
+                                        <td><?= $search['commentaire'] ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <form method="post" class="p-4">
-                    <div class="form-group row">
-                        <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control form-control-sm" name="email" placeholder="example@gamail.com">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="password" class="col-sm-2 col-form-label">Mot de passe</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" name="password" placeholder="........">
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" name="submit" class="btn btn-primary">Connection</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
 </div>
-
 <?php
-include('view/include/footer.php');
+include('view/include/header.php');
 ?>
