@@ -1,6 +1,23 @@
 <?php
 include('view/include/header.php');
 include('database/db.php');
+
+if (isset($_POST['submit'])) :
+
+    $email = htmlentities($_POST['email']);
+    $password = htmlentities($_POST['password']);
+
+    $query = "SELECT * FROM login WHERE email = '$email' AND password = '$password'";
+    $run = mysqli_query($db, $query);
+
+    $result = mysqli_fetch_array($run);
+    if ($result) {
+        $_SESSION['username'] = $result['nom'];
+        header("location:view/home.php");
+    } else {
+        header("location:index.php?message=err");
+    }
+endif;
 ?>
 
 <div class="container">
@@ -9,7 +26,7 @@ include('database/db.php');
             <div class="card">
                 <div class="card-header">
                     <?php
-                    if (isset($_GET['msg']) && $_GET['msg'] == 'err') :
+                    if (isset($_GET['message']) && $_GET['message'] == 'err') :
                         echo "<div class='alert alert-danger'>Veuillez réessayer</div>";
                     endif;
                     ?>
@@ -28,7 +45,7 @@ include('database/db.php');
                         </div>
                     </div>
                     <div class="col-auto">
-                        <button type="submit" class="btn btn-primary">Connection</button>
+                        <button type="submit" name="submit" class="btn btn-primary">Connection</button>
                     </div>
                 </form>
             </div>
